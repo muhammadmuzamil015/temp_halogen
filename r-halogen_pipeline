@@ -1,25 +1,3 @@
-node('J-RASP4-1') {
-    stage('Clean Workspace') {
-        cleanWs()
-    }
-    stage('Clone Repository') {
-        // Checkout the SCM (Git repository)
-        checkout scm
-    }
-    stage('Run Tests on raspi4 (Raspberry Pi 4)') {
-        // Run the performance tests on Raspberry Pi 4
-        sh '''#!/bin/bash
-            ./run_tests_performance.sh raspi4
-        '''
-    }
-    stage('Archive and Stash Results from raspi4') {
-        // Archive the performance results from Raspberry Pi 4
-        archiveArtifacts artifacts: 'performance_results_raspi4.csv', allowEmptyArchive: true
-        // Stash the results for use in another stage
-        stash includes: 'performance_results_raspi4.csv', name: 'raspi4-results'
-    }
-}
-
 node('J-BPF3-1') {
     stage('Clean Workspace') {
         cleanWs()
@@ -28,17 +6,39 @@ node('J-BPF3-1') {
         // Checkout the SCM (Git repository)
         checkout scm
     }
-    stage('Unstash Results and Run Tests on bpif3 (Banana Pi F3)') {
-        // Unstash the results from raspi4
-        unstash 'raspi4-results'
-        // Run the performance tests on bpif3
+    stage('Run Tests on bpif3 (Banana Pi F3)') {
+        // Run the performance tests on Banana Pi F3
         sh '''#!/bin/bash
             ./run_tests_performance.sh bpif3
         '''
     }
-    stage('Archive Results from bpif3') {
-        // Archive the performance results from bpif3
+    stage('Archive and Stash Results from bpif3') {
+        // Archive the performance results from Banana Pi F3
         archiveArtifacts artifacts: 'performance_results_bpif3.csv', allowEmptyArchive: true
+        // Stash the results for use in another stage
+        stash includes: 'performance_results_bpif3.csv', name: 'bpif3-results'
+    }
+}
+
+node('J-RASP4-1') {
+    stage('Clean Workspace') {
+        cleanWs()
+    }
+    stage('Clone Repository') {
+        // Checkout the SCM (Git repository)
+        checkout scm
+    }
+    stage('Unstash Results and Run Tests on raspi4 (Raspberry Pi 4)') {
+        // Unstash the results from bpif3
+        unstash 'bpif3-results'
+        // Run the performance tests on raspi4
+        sh '''#!/bin/bash
+        ./run_tests_performance.sh raspi4
+        '''
+    }
+    stage('Archive Results from raspi4') {
+        // Archive the performance results from raspi4
+        archiveArtifacts artifacts: 'performance_results_raspi4.csv', allowEmptyArchive: true
     }
     stage('Generate Performance Comparison Graph') {
         // Generate the performance comparison graph
