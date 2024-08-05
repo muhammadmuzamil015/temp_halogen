@@ -8,7 +8,9 @@ node('J-RASP4-1') {
     }
     stage('Run Tests on raspi4 (Raspberry Pi 4)') {
         // Run the performance tests on Raspberry Pi 4
-        sh './run_tests_performance.sh raspi4'
+        sh '''#!/bin/bash
+            ./run_tests_performance.sh raspi4
+        '''
     }
     stage('Archive and Stash Results from raspi4') {
         // Archive the performance results from Raspberry Pi 4
@@ -30,7 +32,9 @@ node('J-BPF3-1') {
         // Unstash the results from raspi4
         unstash 'raspi4-results'
         // Run the performance tests on bpif3
-        sh './run_tests_performance.sh bpif3'
+        sh '''#!/bin/bash
+            ./run_tests_performance.sh bpif3
+        '''
     }
     stage('Archive Results from bpif3') {
         // Archive the performance results from bpif3
@@ -38,7 +42,9 @@ node('J-BPF3-1') {
     }
     stage('Generate Performance Comparison Graph') {
         // Generate the performance comparison graph
-        sh './generate_performance_comparison_graph.sh performance_results_raspi4.csv performance_results_bpif3.csv'
+        sh '''#!/bin/bash
+            ./generate_performance_comparison_graph.sh performance_results_raspi4.csv performance_results_bpif3.csv
+        '''
     }
     stage('Archive Performance Comparison Graph') {
         // Archive the generated graph
