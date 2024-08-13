@@ -1,10 +1,10 @@
 parallel(
     'Run Tests on bpif3 (Banana Pi F3)': {
         node('J-BPF3-1') {
-            stage('Clean Workspace') {
+            stage('Clean Workspace on bpif3') {
                 cleanWs()
             }
-            stage('Clone Repository') {
+            stage('Clone Repository on bpif3') {
                 // Checkout the SCM (Git repository)
                 checkout scm
             }
@@ -24,10 +24,10 @@ parallel(
     },
     'Run Tests on raspi4 (Raspberry Pi 4)': {
         node('J-RASP4-1') {
-            stage('Clean Workspace') {
+            stage('Clean Workspace on raspi4') {
                 cleanWs()
             }
-            stage('Clone Repository') {
+            stage('Clone Repository on raspi4') {
                 // Checkout the SCM (Git repository)
                 checkout scm
             }
