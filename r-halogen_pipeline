@@ -44,7 +44,7 @@ parallel(
                 stash includes: 'performance_results_raspi4.csv', name: 'raspi4-results'
             }
         }
-    }
+    },
     'Run Tests on x86 Machine (qemu-riscv64)': {
         node('J-QMU-1') {
             stage('Clean Workspace on x86 Machine') {
