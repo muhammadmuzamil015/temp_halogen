@@ -79,7 +79,7 @@ parallel(
             }
             stage('Archive Results from qemu-riscv64') {
                 // Archive the performance results from raspi4
-                archiveArtifacts artifacts: 'performance_results_raspi4.csv', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'performance_results_qemu-riscv64.csv', allowEmptyArchive: true
             }
         }
     }
@@ -95,7 +95,7 @@ node('J-QMU-1') {
             }
             stage('Archive Results from qemu-aarch64') {
                 // Archive the performance results from raspi4
-                archiveArtifacts artifacts: 'performance_results_aarch64.csv', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'performance_results_qemu-aarch64.csv', allowEmptyArchive: true
             }
 
             stage('Run Tests on spike') {
