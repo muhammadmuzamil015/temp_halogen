@@ -8,11 +8,11 @@ set -euo pipefail
 # Output CSV file
 OUTPUT_CSV="combined_performance_results.csv"
 
-# CSV file names for the comparison
-QEMU_AARCH64_RESULTS_CSV="performance_results_qemu-aarch64.csv"
-QEMU_RISCV64_RESULTS_CSV="performance_results_qemu-riscv64.csv"
-BPIF3_RESULTS_CSV="performance_results_bpif3.csv"
-RASPI4_RESULTS_CSV="performance_results_raspi4.csv"
+# Assigning arguments to variables, or using default file names if not provided
+QEMU_AARCH64_RESULTS_CSV="${1:-performance_results_qemu-aarch64.csv}"
+QEMU_RISCV64_RESULTS_CSV="${2:-performance_results_qemu-riscv64.csv}"
+BPIF3_RESULTS_CSV="${3:-performance_results_bpif3.csv}"
+RASPI4_RESULTS_CSV="${4:-performance_results_raspi4.csv}"
 
 # Array of required CSV files
 required_files=(
