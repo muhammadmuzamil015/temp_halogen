@@ -47,6 +47,21 @@ parallel(
     },
     'Run Tests on x86 Machine (qemu-riscv64)': {
         node('J-QMU-1') {
+            stage('Load Modules on x86 Machine') {
+                sh '''#!/bin/bash
+                    source "$MODULE_INIT"
+                    module load riscv64-gnu-glibc/02022024
+                    module load spike/1.1.1-dev
+                    module load riscv-pk/1.0.0-91-g573c858
+                    module load gcc-aarch64-none-linux-gnu/13.3.rel1
+                    riscv64-unknown-linux-gnu-gcc --version
+                    aarch64-none-linux-gnu-gcc --version
+                    spike /softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk
+                    qemu-aarch64 --version
+                    qemu-riscv64 --version
+                    python3 --version
+                '''
+            }
             stage('Clean Workspace on x86 Machine') {
                 cleanWs()
             }
