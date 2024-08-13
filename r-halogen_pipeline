@@ -24,7 +24,7 @@ parallel(
             }
             stage('Archive and Stash Results from bpif3') {
                 // Archive the performance and correctness results from Banana Pi F3
-                archiveArtifacts artifacts: 'performance_results_bpif3.csv,correctness_results_bpif3.csv', allowEmptyArchive: true
+                // archiveArtifacts artifacts: 'performance_results_bpif3.csv,correctness_results_bpif3.csv', allowEmptyArchive: true
                 // Stash the results for use in another stage
                 stash includes: 'performance_results_bpif3.csv,correctness_results_bpif3.csv', name: 'bpif3-results'
             }
@@ -55,13 +55,13 @@ parallel(
             }
             stage('Archive and Stash Results from raspi4') {
                 // Archive the performance and correctness results from Raspberry Pi 4
-                archiveArtifacts artifacts: 'performance_results_raspi4.csv,correctness_results_raspi4.csv', allowEmptyArchive: true
+                // archiveArtifacts artifacts: 'performance_results_raspi4.csv,correctness_results_raspi4.csv', allowEmptyArchive: true
                 // Stash the results for use in another stage
                 stash includes: 'performance_results_raspi4.csv,correctness_results_raspi4.csv', name: 'raspi4-results'
             }
         }
     },
-    'Run Tests on x86 Machine (qemu-riscv64, qemu-aarch64, spike)': {
+    'Run Tests on x86 Machine (qemu-riscv64, qemu-aarch64)': {
         node('J-QMU-1') {
             stage('Clean Workspace on x86 Machine') {
                 cleanWs()
@@ -70,7 +70,7 @@ parallel(
                 // Checkout the SCM (Git repository)
                 checkout scm
             }
-            stage('Run Tests on qemu-riscv64, qemu-aarch64, and spike') {
+            stage('Run Tests on qemu-riscv64 and qemu-aarch64') {
                 parallel(
                     'Run Correctness and Performance Tests on qemu-riscv64': {
                         parallel(
@@ -110,9 +110,9 @@ parallel(
                     }
                 )
             }
-            stage('Archive Results from qemu-riscv64, qemu-aarch64, and spike') {
-                // Archive the performance and correctness results from qemu-riscv64, qemu-aarch64, and spike
-                archiveArtifacts artifacts: 'performance_results_qemu-riscv64.csv,correctness_results_qemu-riscv64.csv,performance_results_qemu-aarch64.csv,correctness_results_qemu-aarch64.csv', allowEmptyArchive: true
+            stage('Archive Results from qemu-riscv64 and qemu-aarch64') {
+                // Archive the performance and correctness results from qemu-riscv64 and qemu-aarch64
+                // archiveArtifacts artifacts: 'performance_results_qemu-riscv64.csv,correctness_results_qemu-riscv64.csv,performance_results_qemu-aarch64.csv,correctness_results_qemu-aarch64.csv', allowEmptyArchive: true
             }
         }
     }
