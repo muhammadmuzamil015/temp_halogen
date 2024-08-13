@@ -102,6 +102,7 @@ node('J-QMU-1') {
                 // Run the performance tests on raspi4
                 sh '''#!/bin/bash -l
                     source "$MODULE_INIT"
+                    module load riscv64-gnu-glibc/02022024
                     module load spike/1.1.1-dev
                     module load riscv-pk/1.0.0-91-g573c858
                     ./run_tests_performance.sh spike
