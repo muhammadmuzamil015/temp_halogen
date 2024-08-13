@@ -6,14 +6,14 @@ from quickchart import QuickChart
 # Function to read CSV file and return the count of passed and failed tests per target
 def read_csv(filename):
     test_names = []
-    passed_counts = [[] for _ in range(4)]  # Four empty lists for each target
-    failed_counts = [[] for _ in range(4)]  # Four empty lists for each target
+    passed_counts = [[] for _ in range(3)]  # Three empty lists for each target
+    failed_counts = [[] for _ in range(3)]  # Three empty lists for each target
 
     with open(filename, 'r') as file:
         reader = list(csv.reader(file))
         for row in reader[1:-2]:  # Skip the first line (header) and the last two lines
             test_names.append(row[0])
-            for i in range(4):
+            for i in range(3):
                 if row[i + 1] == "Passed":
                     passed_counts[i].append(1)
                     failed_counts[i].append(0)
@@ -28,7 +28,7 @@ csv_file = 'combined_correctness_results.csv'
 test_names, passed_counts, failed_counts = read_csv(csv_file)
 
 # List of targets
-targets = ['QEMU RISCV64', 'SPIKE', 'BPIF3', 'RASPI4']
+targets = ['QEMU RISCV64', 'BPIF3', 'RASPI4']
 
 # Loop over each target to create a bar chart with the title
 for i, target in enumerate(targets):
@@ -86,6 +86,6 @@ for i, target in enumerate(targets):
     }
     
     # Save each chart to a file
-    output_filename = f'correctness_results_{target.replace(" ", "_").lower()}.png'
+    output_filename = f'correctness_results_{target.replace(" ", "-").lower()}.png'
     qc.to_file(output_filename)
     print(f"Correctness results bar chart saved to '{output_filename}'")

@@ -75,7 +75,7 @@ for test in "${tests[@]}"; do
 
     elif [[ "$TARGET" == "spike" ]]; then
         # Run the RISC-V command
-        make PK=/softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk ARCH=riscv TARGET="${TARGET}" SUBD=riscv SRCS=tests/performance/"${test}"/"${test}".c
+        make ARCH=riscv TARGET="${TARGET}" SUBD=riscv SRCS=tests/performance/"${test}"/"${test}".c
 
         # Define the output files
         riscv_out="RUN/tests/performance/${test}/riscv/${TARGET}/${TARGET}.out"

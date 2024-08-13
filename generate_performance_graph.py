@@ -25,81 +25,58 @@ def read_csv(filename):
     
     return test_names, qemu_aarch64_times, qemu_riscv64_times, spike_times, bpif3_times, raspi4_times
 
+# Function to generate and save a bar chart
+def generate_chart(test_names, dataset1, label1, dataset2, label2, output_filename):
+    # Initialize QuickChart
+    qc = QuickChart()
+    qc.width = 1200
+    qc.height = 800
+
+    # Create the chart configuration with bright/dark colors
+    qc.config = {
+        "type": "bar",
+        "data": {
+            "labels": test_names,
+            "datasets": [
+                {
+                    "label": label1,
+                    "data": dataset1
+                },
+                {
+                    "label": label2,
+                    "data": dataset2
+                }
+            ]
+        },
+        "options": {
+            "scales": {
+                "yAxes": [{
+                    "ticks": {
+                        "beginAtZero": True,
+                        "suggestedMax": max(dataset1 + dataset2) * 1.1
+                    },
+                    "scaleLabel": {
+                        "display": True,
+                        "labelString": "Time (us)"
+                    }
+                }]
+            },
+            "title": {
+                "display": True,
+                "text": f"Performance Comparison: {label1} vs {label2}"
+            }
+        }
+    }
+
+    # Save the chart to a file
+    qc.to_file(output_filename)
+    print(f"Performance comparison chart saved to '{output_filename}'")
+
 # Read the CSV file
 csv_file = 'combined_performance_results.csv'
 test_names, qemu_aarch64_times, qemu_riscv64_times, spike_times, bpif3_times, raspi4_times = read_csv(csv_file)
 
-# Initialize QuickChart
-qc = QuickChart()
-qc.width = 1200
-qc.height = 800
-
-# Create the chart configuration with bright/dark colors
-qc.config = {
-    "type": "bar",
-    "data": {
-        "labels": test_names,
-        "datasets": [
-            {
-                "label": "QEMU AARCH64",
-                "data": qemu_aarch64_times,
-                "backgroundColor": "rgba(255, 69, 0, 0.85)"  # Dark Orange
-            },
-            {
-                "label": "QEMU RISCV64",
-                "data": qemu_riscv64_times,
-                "backgroundColor": "rgba(0, 0, 205, 0.85)"  # Dark Blue
-            },
-            {
-                "label": "SPIKE",
-                "data": spike_times,
-                "backgroundColor": "rgba(34, 139, 34, 0.85)"  # Dark Green
-            },
-            {
-                "label": "BPIF3",
-                "data": bpif3_times,
-                "backgroundColor": "rgba(255, 215, 0, 0.85)"  # Bright Gold
-            },
-            {
-                "label": "RASPI4",
-                "data": raspi4_times,
-                "backgroundColor": "rgba(128, 0, 128, 0.85)"  # Dark Purple
-            }
-        ]
-    },
-    "options": {
-        "scales": {
-            "yAxes": [{
-                "ticks": {
-                    "beginAtZero": True,
-                    "suggestedMax": max(qemu_aarch64_times + qemu_riscv64_times + spike_times + bpif3_times + raspi4_times) * 1.1
-                },
-                "scaleLabel": {
-                    "display": True,
-                    "labelString": "Time (us)"
-                }
-            }]
-        },
-        "title": {
-            "display": True,
-            "text": "Performance Comparison Across Targets"
-        },
-        "plugins": {
-            "datalabels": {
-                "display": True,
-                "align": "top",
-                "anchor": "end",
-                "color": "black",
-                "font": {
-                    "weight": "bold"
-                },
-                "formatter": "function(value) { return value.toFixed(3) + ' us'; }"
-            }
-        }
-    }
-}
-
-# Save the chart to a file
-output_filename = 'performance_comparison_across_targets.png'
-qc.to_file(output_filename)
-print(f"Performance comparison chart saved to '{output_filename}'")
+# Generate and save the charts
+generate_chart(test_names, qemu_aarch64_times, "QEMU AARCH64", qemu_riscv64_times, "QEMU RISCV64", "performance_comparison_qemu_aarch64_vs_qemu_riscv64.png")
+generate_chart(test_names, raspi4_times, "RASPI4", bpif3_times, "BPIF3", "performance_comparison_raspi4_vs_bpif3.png")
+generate_chart(test_names, qemu_aarch64_times, "QEMU AARCH64", spike_times, "SPIKE", "performance_comparison_qemu_aarch64_vs_spike.png")

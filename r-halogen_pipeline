@@ -107,34 +107,12 @@ parallel(
                                 '''
                             }
                         )
-                    },
-                    'Run Correctness and Performance Tests on spike': {
-                        parallel(
-                            'Run Correctness Tests': {
-                                sh '''#!/bin/bash -l
-                                    source "$MODULE_INIT"
-                                    module load riscv64-gnu-glibc/02022024
-                                    module load spike/1.1.1-dev
-                                    module load riscv-pk/1.0.0-91-g573c858
-                                    ./run_tests_correctness.sh spike
-                                '''
-                            },
-                            'Run Performance Tests': {
-                                sh '''#!/bin/bash -l
-                                    source "$MODULE_INIT"
-                                    module load riscv64-gnu-glibc/02022024
-                                    module load spike/1.1.1-dev
-                                    module load riscv-pk/1.0.0-91-g573c858
-                                    ./run_tests_performance.sh spike
-                                '''
-                            }
-                        )
                     }
                 )
             }
             stage('Archive Results from qemu-riscv64, qemu-aarch64, and spike') {
                 // Archive the performance and correctness results from qemu-riscv64, qemu-aarch64, and spike
-                archiveArtifacts artifacts: 'performance_results_qemu-riscv64.csv,correctness_results_qemu-riscv64.csv,performance_results_qemu-aarch64.csv,correctness_results_qemu-aarch64.csv,performance_results_spike.csv,correctness_results_spike.csv', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'performance_results_qemu-riscv64.csv,correctness_results_qemu-riscv64.csv,performance_results_qemu-aarch64.csv,correctness_results_qemu-aarch64.csv', allowEmptyArchive: true
             }
         }
     }
@@ -171,7 +149,7 @@ node('J-QMU-1') {
             python3 generate_correctness_graph.py
         '''
         // Archive the generated correctness graph
-        archiveArtifacts artifacts: 'correctness_results_bpif3.png,correctness_results_raspi4.png,correctness_results_spike.png,correctness_results_qemu_riscv64.png', allowEmptyArchive: true
+        archiveArtifacts artifacts: 'correctness_results_bpif3.png,correctness_results_raspi4.png,correctness_results_qemu_riscv64.png', allowEmptyArchive: true
     }
     stage('Generate Combined Performance Graph and Archive') {
         // Generate the performance comparison graph
@@ -179,7 +157,6 @@ node('J-QMU-1') {
             python3 generate_performance_graph.py
         '''
         // Archive the generated performance graph
-        archiveArtifacts artifacts: 'performance_comparison_across_targets.png', allowEmptyArchive: true
+        archiveArtifacts artifacts: 'performance_comparison_qemu_aarch64_vs_qemu_riscv64.png,performance_comparison_raspi4_vs_bpif3.png', allowEmptyArchive: true
     }
 }
-
