@@ -72,7 +72,8 @@ parallel(
             stage('Run Tests on qemu-riscv64') {
                 // Run the performance tests on raspi4
                 sh '''#!/bin/bash
-                ./run_tests_performance.sh qemu-riscv64
+                    module load riscv64-gnu-glibc/02022024
+                    ./run_tests_performance.sh qemu-riscv64
                 '''
             }
             stage('Archive Results from qemu-riscv64') {
@@ -86,7 +87,8 @@ node('J-QMU-1') {
             stage('Run Tests on qemu-aarch64') {
                 // Run the performance tests on raspi4
                 sh '''#!/bin/bash
-                ./run_tests_performance.sh qemu-aarch64
+                    module load gcc-aarch64-none-linux-gnu/13.3.rel1
+                    ./run_tests_performance.sh qemu-aarch64
                 '''
             }
             stage('Archive Results from qemu-aarch64') {
@@ -97,7 +99,9 @@ node('J-QMU-1') {
             stage('Run Tests on spike') {
                 // Run the performance tests on raspi4
                 sh '''#!/bin/bash
-                ./run_tests_performance.sh spike
+                    module load spike/1.1.1-dev
+                    module load riscv-pk/1.0.0-91-g573c858
+                    ./run_tests_performance.sh spike
                 '''
             }
             stage('Archive Results from spike') {
