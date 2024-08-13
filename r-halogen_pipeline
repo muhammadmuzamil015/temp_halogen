@@ -149,7 +149,7 @@ node('J-QMU-1') {
             python3 generate_correctness_graph.py
         '''
         // Archive the generated correctness graph
-        archiveArtifacts artifacts: 'correctness_results_bpif3.png,correctness_results_raspi4.png,correctness_results_qemu_riscv64.png', allowEmptyArchive: true
+        archiveArtifacts artifacts: 'correctness_results_bpif3.png,correctness_results_raspi4.png,correctness_results_qemu-riscv64.png', allowEmptyArchive: true
     }
     stage('Generate Combined Performance Graph and Archive') {
         // Generate the performance comparison graph
@@ -157,6 +157,6 @@ node('J-QMU-1') {
             python3 generate_performance_graph.py
         '''
         // Archive the generated performance graph
-        archiveArtifacts artifacts: 'performance_comparison_qemu_aarch64_vs_qemu_riscv64.png,performance_comparison_raspi4_vs_bpif3.png', allowEmptyArchive: true
+        archiveArtifacts artifacts: 'performance_comparison_qemu-aarch64_vs_qemu-riscv64.png,performance_comparison_raspi4_vs_bpif3.png', allowEmptyArchive: true
     }
 }

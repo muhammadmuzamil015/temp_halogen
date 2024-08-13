@@ -8,7 +8,6 @@ def read_csv(filename):
     test_names = []
     qemu_aarch64_times = []
     qemu_riscv64_times = []
-    spike_times = []
     bpif3_times = []
     raspi4_times = []
     
@@ -19,11 +18,10 @@ def read_csv(filename):
             test_names.append(row[0])
             qemu_aarch64_times.append(float(row[1]))
             qemu_riscv64_times.append(float(row[2]))
-            spike_times.append(float(row[3]))
-            bpif3_times.append(float(row[4]))
-            raspi4_times.append(float(row[5]))
+            bpif3_times.append(float(row[3]))
+            raspi4_times.append(float(row[4]))
     
-    return test_names, qemu_aarch64_times, qemu_riscv64_times, spike_times, bpif3_times, raspi4_times
+    return test_names, qemu_aarch64_times, qemu_riscv64_times, bpif3_times, raspi4_times
 
 # Function to generate and save a bar chart
 def generate_chart(test_names, dataset1, label1, dataset2, label2, output_filename):
@@ -74,9 +72,8 @@ def generate_chart(test_names, dataset1, label1, dataset2, label2, output_filena
 
 # Read the CSV file
 csv_file = 'combined_performance_results.csv'
-test_names, qemu_aarch64_times, qemu_riscv64_times, spike_times, bpif3_times, raspi4_times = read_csv(csv_file)
+test_names, qemu_aarch64_times, qemu_riscv64_times, bpif3_times, raspi4_times = read_csv(csv_file)
 
 # Generate and save the charts
-generate_chart(test_names, qemu_aarch64_times, "QEMU AARCH64", qemu_riscv64_times, "QEMU RISCV64", "performance_comparison_qemu_aarch64_vs_qemu_riscv64.png")
+generate_chart(test_names, qemu_aarch64_times, "QEMU AARCH64", qemu_riscv64_times, "QEMU RISCV64", "performance_comparison_qemu-aarch64_vs_qemu-riscv64.png")
 generate_chart(test_names, raspi4_times, "RASPI4", bpif3_times, "BPIF3", "performance_comparison_raspi4_vs_bpif3.png")
-generate_chart(test_names, qemu_aarch64_times, "QEMU AARCH64", spike_times, "SPIKE", "performance_comparison_qemu_aarch64_vs_spike.png")
