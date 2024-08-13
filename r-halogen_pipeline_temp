@@ -1,0 +1,16 @@
+node('J-QMU-1') {
+    stage('Run Tests on spike') {
+        // Run the performance tests on raspi4
+        sh '''#!/bin/bash -l
+            source "$MODULE_INIT"
+            module load riscv64-gnu-glibc/02022024
+            module load spike/1.1.1-dev
+            module load riscv-pk/1.0.0-91-g573c858
+            ./run_tests_performance.sh spike
+        '''
+    }
+    stage('Archive Results from spike') {
+        // Archive the performance results from raspi4
+        archiveArtifacts artifacts: '/home/jenkins_user/runner_dir/workspace/R-Halogen/RUN/tests/performance/vadd_s8_rvv_test/riscv-pk/spike/spike.log', allowEmptyArchive: true
+    }
+}
