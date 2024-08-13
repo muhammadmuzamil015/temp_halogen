@@ -37,28 +37,83 @@ parallel(
                 ./run_tests_performance.sh raspi4
                 '''
             }
-            stage('Archive Results from raspi4') {
+            stage('Archive and Stash Results from raspi4') {
+                // Archive the performance results from raspi4
+                archiveArtifacts artifacts: 'performance_results_raspi4.csv', allowEmptyArchive: true
+                // Stash the results for use in another stage
+                stash includes: 'performance_results_raspi4.csv', name: 'raspi4-results'
+            }
+        }
+    }
+    'Run Tests on x86 Machine (qemu-riscv64)': {
+        node('J-QMU-1') {
+            stage('Clean Workspace on x86 Machine') {
+                cleanWs()
+            }
+            stage('Clone Repository on x86 Machine') {
+                // Checkout the SCM (Git repository)
+                checkout scm
+            }
+            stage('Run Tests on qemu-riscv64') {
+                // Run the performance tests on raspi4
+                sh '''#!/bin/bash
+                ./run_tests_performance.sh qemu-riscv64
+                '''
+            }
+            stage('Archive Results from qemu-riscv64') {
                 // Archive the performance results from raspi4
                 archiveArtifacts artifacts: 'performance_results_raspi4.csv', allowEmptyArchive: true
             }
         }
     }
 )
+node('J-QMU-1') {
+            stage('Run Tests on qemu-aarch64') {
+                // Run the performance tests on raspi4
+                sh '''#!/bin/bash
+                ./run_tests_performance.sh qemu-aarch64
+                '''
+            }
+            stage('Archive Results from qemu-aarch64') {
+                // Archive the performance results from raspi4
+                archiveArtifacts artifacts: 'performance_results_aarch64.csv', allowEmptyArchive: true
+            }
 
-node('J-RASP4-1') {
-            stage('Unstash Results from bpif3 to raspi4') {
+            stage('Run Tests on spike') {
+                // Run the performance tests on raspi4
+                sh '''#!/bin/bash
+                ./run_tests_performance.sh spike
+                '''
+            }
+            stage('Archive Results from spike') {
+                // Archive the performance results from raspi4
+                archiveArtifacts artifacts: 'performance_results_spike.csv', allowEmptyArchive: true
+            }
+            stage('Unstash Results from bpif3 to x86 machine') {
                 // Unstash the results from bpif3
                 unstash 'bpif3-results'
             }
-            stage('Generate Performance Comparison Graph') {
+            stage('Unstash Results from raspi4 to x86 machine') {
+                // Unstash the results from bpif3
+                unstash 'raspi4-results'
+            }
+            stage('Generate Combined Performance Comparison') {
                 // Generate the performance comparison graph
                 sh '''#!/bin/bash
-                    ./generate_performance_comparison_graph.sh performance_results_raspi4.csv performance_results_bpif3.csv
+                    ./combined_performance_comparison.sh
                 '''
             }
-            stage('Archive Performance Comparison Graph') {
+            stage('Archive Combined Performance Results') {
                 // Archive the generated graph
-                archiveArtifacts artifacts: 'performance_comparison_*.png', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'combined_performance_results.csv', allowEmptyArchive: true
+            }
+            stage('Generate Combined Performance Graph and Archive Graph') {
+                // Generate the performance comparison graph
+                sh '''#!/bin/bash
+                    python3 generate_performance_graph.py                
+                '''
+                // Archive the generated graph
+                archiveArtifacts artifacts: 'performance_comparison_across_targets.png', allowEmptyArchive: true
             }
 }
 
