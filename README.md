@@ -43,8 +43,8 @@ The following table describes the arguments you can use with the Makefile along 
 - `compile`: Compiles the source files into an ELF executable and disassembles it.
 - `spike`: Runs the compiled RISC-V executable on the Spike simulator.
 - `qemu`: Runs the compiled executable on QEMU (supports both ARM and RISC-V).
-- `bpif3`: Runs the compiled executable on BPIF3.
-- `raspi4`: Runs the compiled executable on RASPI4.
+- `bpif3`: Runs the compiled executable on BPIF3 (Banana Pi BPI-F3 RISC-V SBC).
+- `raspi4`: Runs the compiled executable on RASPI4 (Raspberry Pi 4 ARM Board).
 - `clean`: Cleans up the build and run directories.
 
 ### Usage
