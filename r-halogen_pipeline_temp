@@ -1,4 +1,11 @@
 node('J-QMU-1') {
+    stage('Clean Workspace on x86 Machine') {
+        cleanWs()
+    }
+    stage('Clone Repository on x86 Machine') {
+        // Checkout the SCM (Git repository)
+        checkout scm
+    }
     stage('Run Tests on spike') {
         // Run the performance tests on raspi4
         sh '''#!/bin/bash -l
@@ -14,3 +21,4 @@ node('J-QMU-1') {
         archiveArtifacts artifacts: '/home/jenkins_user/runner_dir/workspace/R-Halogen/RUN/tests/performance/vadd_s8_rvv_test/riscv-pk/spike/spike.log', allowEmptyArchive: true
     }
 }
+

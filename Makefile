@@ -401,7 +401,7 @@ endif
 
 spike:
 	@echo ""
-	$(SPIKE) --isa=$(SPIKE_ISA) -l --log-commits ${PK} ${ELF_FILE}
+	$(SPIKE) --isa=$(SPIKE_ISA) -l --log-commits ${PK} ${ELF_FILE} 1> ${RUN_DIR}/$(SPIKE)/$@.out 2> ${RUN_DIR}/$(SPIKE)/$@.log
 
 qemu:
 	@echo ""
@@ -419,3 +419,4 @@ clean:
 	rm -f  $(MAKEFILE_DIR)/temp.sh
 	rm -rf $(MAKEFILE_DIR)/LINT_RUN
 	rm -rf $(MAKEFILE_DIR)/RUN
+
