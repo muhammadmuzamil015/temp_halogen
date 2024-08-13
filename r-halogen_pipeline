@@ -31,9 +31,7 @@ parallel(
                 // Checkout the SCM (Git repository)
                 checkout scm
             }
-            stage('Unstash Results and Run Tests on raspi4') {
-                // Unstash the results from bpif3
-                unstash 'bpif3-results'
+            stage('Run Tests on raspi4') {
                 // Run the performance tests on raspi4
                 sh '''#!/bin/bash
                 ./run_tests_performance.sh raspi4
@@ -42,6 +40,15 @@ parallel(
             stage('Archive Results from raspi4') {
                 // Archive the performance results from raspi4
                 archiveArtifacts artifacts: 'performance_results_raspi4.csv', allowEmptyArchive: true
+            }
+        }
+    }
+)
+
+node('J-RASP4-1') {
+            stage('Unstash Results from bpif3 to raspi4') {
+                // Unstash the results from bpif3
+                unstash 'bpif3-results'
             }
             stage('Generate Performance Comparison Graph') {
                 // Generate the performance comparison graph
@@ -53,7 +60,5 @@ parallel(
                 // Archive the generated graph
                 archiveArtifacts artifacts: 'performance_comparison_*.png', allowEmptyArchive: true
             }
-        }
-    }
-)
+}
 
