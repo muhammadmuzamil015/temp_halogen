@@ -22,9 +22,7 @@ parallel(
                     }
                 )
             }
-            stage('Archive and Stash Results from bpif3') {
-                // Archive the performance and correctness results from Banana Pi F3
-                // archiveArtifacts artifacts: 'performance_results_bpif3.csv,correctness_results_bpif3.csv', allowEmptyArchive: true
+            stage('Stash Results from bpif3') {
                 // Stash the results for use in another stage
                 stash includes: 'performance_results_bpif3.csv,correctness_results_bpif3.csv', name: 'bpif3-results'
             }
@@ -53,9 +51,7 @@ parallel(
                     }
                 )
             }
-            stage('Archive and Stash Results from raspi4') {
-                // Archive the performance and correctness results from Raspberry Pi 4
-                // archiveArtifacts artifacts: 'performance_results_raspi4.csv,correctness_results_raspi4.csv', allowEmptyArchive: true
+            stage('Stash Results from raspi4') {
                 // Stash the results for use in another stage
                 stash includes: 'performance_results_raspi4.csv,correctness_results_raspi4.csv', name: 'raspi4-results'
             }
@@ -70,7 +66,7 @@ parallel(
                 // Checkout the SCM (Git repository)
                 checkout scm
             }
-            stage('Run Tests on qemu-riscv64 and qemu-aarch64') {
+            stage('Run Correctness and Performance Tests on qemu-riscv64 and qemu-aarch64') {
                 parallel(
                     'Run Correctness and Performance Tests on qemu-riscv64': {
                         parallel(
@@ -110,10 +106,6 @@ parallel(
                     }
                 )
             }
-            stage('Archive Results from qemu-riscv64 and qemu-aarch64') {
-                // Archive the performance and correctness results from qemu-riscv64 and qemu-aarch64
-                // archiveArtifacts artifacts: 'performance_results_qemu-riscv64.csv,correctness_results_qemu-riscv64.csv,performance_results_qemu-aarch64.csv,correctness_results_qemu-aarch64.csv', allowEmptyArchive: true
-            }
         }
     }
 )
@@ -127,36 +119,28 @@ node('J-QMU-1') {
         // Unstash the results from raspi4
         unstash 'raspi4-results'
     }
-    stage('Generate Combined Correctness Comparison') {
-        // Generate the correctness comparison graph
+    stage('Generate Correctness Comparison Across Targets') {
+        // Generate the correctness comparison ressults across targets
         sh '''#!/bin/bash
-            ./combined_correctness_comparison.sh
+            ./correctness_comparison_results.sh
         '''
     }
-    stage('Generate Combined Performance Comparison') {
-        // Generate the performance comparison graph
+    stage('Generate Performance Comparison Across Targets') {
+        // Generate the performance comparison resutls across targets
         sh '''#!/bin/bash
-            ./combined_performance_comparison.sh
+            ./performance_comparison_results.sh
         '''
     }
-    stage('Archive Combined Results') {
-        // Archive the combined performance and correctness results
-        archiveArtifacts artifacts: 'combined_performance_results.csv,combined_correctness_results.csv', allowEmptyArchive: true
+    stage('Archive Correctness and Performance Results') {
+        // Archive the performance and correctness results across targets
+        archiveArtifacts artifacts: 'performance_results.csv,correctness_results.csv', allowEmptyArchive: true
     }
-    stage('Generate Combined Correctness Graph and Archive') {
-        // Generate the correctness comparison graph
-        sh '''#!/bin/bash
-            python3 generate_correctness_graph.py
-        '''
-        // Archive the generated correctness graph
-        archiveArtifacts artifacts: 'correctness_results_bpif3.png,correctness_results_raspi4.png,correctness_results_qemu-riscv64.png', allowEmptyArchive: true
-    }
-    stage('Generate Combined Performance Graph and Archive') {
+    stage('Generate Performance Graph Across Targets and Archive') {
         // Generate the performance comparison graph
         sh '''#!/bin/bash
             python3 generate_performance_graph.py
         '''
         // Archive the generated performance graph
-        archiveArtifacts artifacts: 'performance_comparison_qemu-aarch64_vs_qemu-riscv64.png,performance_comparison_raspi4_vs_bpif3.png', allowEmptyArchive: true
+        archiveArtifacts artifacts: 'performance_comparison_across_targets.png', allowEmptyArchive: true
     }
 }

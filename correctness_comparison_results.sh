@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # Output CSV file
-OUTPUT_CSV="combined_correctness_results.csv"
+OUTPUT_CSV="correctness_results.csv"
 
 # Assigning arguments to variables, or using default file names if not provided
 QEMU_AARCH64_RESULTS_CSV="${1:-correctness_results_qemu-aarch64.csv}"
