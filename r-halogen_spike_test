@@ -1,0 +1,23 @@
+node('J-BPF3-1') {
+    stage('Clean Workspace on bpif3') {
+        cleanWs()
+    }
+    stage('Clone Repository on bpif3') {
+        // Checkout the SCM (Git repository)
+        checkout scm
+    }
+    stage('Running Makefile for spike') {
+        sh'''#!/bin/bash
+            source "$MODULE_INIT"
+            module load riscv64-gnu-glibc/02022024
+            riscv64-unknown-linux-gnu-gcc --version
+            module load spike/1.1.1-dev
+            module load riscv-pk/1.0.0-91-g573c858
+            spike /softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk
+            make PK=/softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk ARCH=riscv TARGET=spike SUBD=riscv SRCS=tests/performance/vadd_s8_rvv_test/vadd_s8_rvv_test.c
+        '''
+    }
+    stage('Archive Spike Results') {
+        archiveArtifacts artifacts: 'RUN/tests/performance/vadd_s8_rvv_test/riscv/spike/spike.out,RUN/tests/performance/vadd_s8_rvv_test/riscv/spike/spike.log', allowEmptyArchive: true
+    } 
+}
