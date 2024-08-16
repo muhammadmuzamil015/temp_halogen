@@ -13,11 +13,13 @@ parallel(
                     'Run Correctness Tests': {
                         sh '''#!/bin/bash
                             ./run_tests_correctness.sh bpif3
+                            make clean
                         '''
                     },
                     'Run Performance Tests': {
                         sh '''#!/bin/bash
                             ./run_tests_performance.sh bpif3
+                            make clean
                         '''
                     }
                 )
@@ -42,11 +44,13 @@ parallel(
                     'Run Correctness Tests': {
                         sh '''#!/bin/bash
                             ./run_tests_correctness.sh raspi4
+                            make clean
                         '''
                     },
                     'Run Performance Tests': {
                         sh '''#!/bin/bash
                             ./run_tests_performance.sh raspi4
+                            make clean
                         '''
                     }
                 )
@@ -91,6 +95,7 @@ parallel(
                                     source "$MODULE_INIT"
                                     module load riscv64-gnu-glibc/02022024
                                     ./run_tests_correctness.sh qemu-riscv64
+                                    make clean
                                 '''
                             },
                             'Run Performance Tests': {
@@ -98,6 +103,7 @@ parallel(
                                     source "$MODULE_INIT"
                                     module load riscv64-gnu-glibc/02022024
                                     ./run_tests_performance.sh qemu-riscv64
+                                    make clean
                                 '''
                             }
                         )
@@ -109,6 +115,7 @@ parallel(
                                     source "$MODULE_INIT"
                                     module load gcc-aarch64-none-linux-gnu/13.3.rel1
                                     ./run_tests_correctness.sh qemu-aarch64
+                                    make clean
                                 '''
                             },
                             'Run Performance Tests': {
@@ -116,6 +123,7 @@ parallel(
                                     source "$MODULE_INIT"
                                     module load gcc-aarch64-none-linux-gnu/13.3.rel1
                                     ./run_tests_performance.sh qemu-aarch64
+                                    make clean
                                 '''
                             }
                         )
@@ -128,6 +136,7 @@ parallel(
                                     module load riscv64-gnu-glibc/02022024
                                     module load spike/1.1.1-dev
                                     ./run_tests_correctness.sh spike
+                                    make clean
                                 '''
                             },
                             'Run Performance Tests': {
@@ -136,6 +145,7 @@ parallel(
                                     module load riscv64-gnu-glibc/02022024
                                     module load spike/1.1.1-dev
                                     ./run_tests_performance.sh spike
+                                    make clean
                                 '''
                             }
                         )
@@ -180,3 +190,4 @@ node('J-QMU-1') {
         archiveArtifacts artifacts: 'performance_comparison_across_targets.png', allowEmptyArchive: true
     }
 }
+
