@@ -14,7 +14,7 @@ node('J-QMU-1') {
             
             find / -type f -name pk 2>/dev/null
 
-            spike /home/jenkins_user/runner_dir/workspace/R-Halogen/riscv-pk/build/riscv64-unknown-elf/bin/pk
+            spike pk
             spike --isa=rv64imafdcv_zba_zbb_zbc_zbs /home/jenkins_user/runner_dir/workspace/R-Halogen/riscv-pk/build/riscv64-unknown-elf/bin/pk test.elf
             make PK=/softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk ARCH=riscv TARGET=spike SUBD=riscv SRCS=tests/performance/vadd_s8_rvv_test/vadd_s8_rvv_test.c
         '''
