@@ -66,7 +66,23 @@ parallel(
                 // Checkout the SCM (Git repository)
                 checkout scm
             }
-            stage('Run Correctness and Performance Tests on qemu-riscv64 and qemu-aarch64') {
+            stage('Configuring riscv-pk'){
+                sh '''#!/bin/bash -l
+                source "$MODULE_INIT"
+                module load riscv64-gnu-glibc/02022024
+                module load spike/1.1.1-dev
+                module load riscv64-gnu-elf/02022024
+                git clone https://github.com/riscv-software-src/riscv-pk.git
+                cd riscv-pk
+                mkdir build
+                cd build
+                ../configure --prefix=$(pwd) --host=riscv64-unknown-elf
+                make
+                make install
+                cd ../..
+            '''
+            }
+            stage('Run Correctness and Performance Tests on qemu-riscv64, qemu-aarch64 and spike') {
                 parallel(
                     'Run Correctness and Performance Tests on qemu-riscv64': {
                         parallel(
@@ -100,6 +116,26 @@ parallel(
                                     source "$MODULE_INIT"
                                     module load gcc-aarch64-none-linux-gnu/13.3.rel1
                                     ./run_tests_performance.sh qemu-aarch64
+                                '''
+                            }
+                        )
+                    },
+                    'Run Correctness and Performance Tests on spike': {
+                        parallel(
+                            'Run Correctness Tests': {
+                                sh '''#!/bin/bash -l
+                                    source "$MODULE_INIT"
+                                    module load riscv64-gnu-glibc/02022024
+                                    module load spike/1.1.1-dev
+                                    ./run_tests_correctness.sh spike
+                                '''
+                            },
+                            'Run Performance Tests': {
+                                sh '''#!/bin/bash -l
+                                    source "$MODULE_INIT"
+                                    module load riscv64-gnu-glibc/02022024
+                                    module load spike/1.1.1-dev
+                                    ./run_tests_performance.sh spike
                                 '''
                             }
                         )
