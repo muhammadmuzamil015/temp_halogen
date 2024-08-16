@@ -12,7 +12,7 @@ node('J-QMU-1') {
             module load riscv64-gnu-glibc/02022024
             riscv64-unknown-linux-gnu-gcc --version
             module load spike/1.1.1-dev
-            spike /softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk
+            spike /softwares/RISCV/riscv-pk/riscv64-unknown-elf/bin/pk
             spike --isa=rv64imafdcv_zba_zbb_zbc_zbs /softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk test.elf
             make PK=/softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk ARCH=riscv TARGET=spike SUBD=riscv SRCS=tests/performance/vadd_s8_rvv_test/vadd_s8_rvv_test.c
         '''
