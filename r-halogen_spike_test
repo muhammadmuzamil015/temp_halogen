@@ -1,4 +1,4 @@
-node('J-BPF3-1') {
+node('J-QMU-1') {
     stage('Clean Workspace on bpif3') {
         cleanWs()
     }
