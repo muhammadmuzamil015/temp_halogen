@@ -1,4 +1,7 @@
 node('J-QMU-1') {
+    stage('Clean Workspace on bpif3') {
+        cleanWs()
+    }
     stage('Clone Repository on bpif3') {
         // Checkout the SCM (Git repository)
         checkout scm
@@ -12,10 +15,19 @@ node('J-QMU-1') {
             
             module load riscv64-gnu-elf/02022024
             
+            cd /softwares/RISCV/riscv-pk/
+            git clone https://github.com/riscv-software-src/riscv-pk.git
+            cd riscv-pk
+            mkdir build
+            cd build
+            ../configure --prefix=$(pwd) --host=riscv64-unknown-elf
+            make
+            make install
+            
             find / -type f -name pk 2>/dev/null
 
-            spike pk
-            spike --isa=rv64imafdcv_zba_zbb_zbc_zbs /home/jenkins_user/runner_dir/workspace/R-Halogen/riscv-pk/build/riscv64-unknown-elf/bin/pk test.elf
+            spike /home/jenkins_user/runner_dir/workspace/R-Halogen/riscv-pk/build/riscv64-unknown-elf/bin/pk
+            spike --isa=rv64imafdcv_zba_zbb_zbc_zbs /softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk test.elf
             make PK=/softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk ARCH=riscv TARGET=spike SUBD=riscv SRCS=tests/performance/vadd_s8_rvv_test/vadd_s8_rvv_test.c
         '''
     }
