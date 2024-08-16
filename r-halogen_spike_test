@@ -14,7 +14,9 @@ node('J-QMU-1') {
             module load spike/1.1.1-dev
             
             
-            ls /softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/
+            load avail
+            
+            
 
             spike /softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk
             spike --isa=rv64imafdcv_zba_zbb_zbc_zbs /softwares/RISCV/riscv-pk/573c858d9071a2216537f71de651a814f76ee76d/riscv64-unknown-elf/bin/pk test.elf
