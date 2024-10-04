@@ -163,6 +163,18 @@ tests=(
     "vsubhn_u16_rvv_test"
     "vsubhn_u32_rvv_test"
     "vsubhn_u64_rvv_test"
+    "vraddhn_s16_rvv_test"
+    "vraddhn_s32_rvv_test"
+    "vraddhn_s64_rvv_test"
+    "vraddhn_u16_rvv_test"
+    "vraddhn_u32_rvv_test"
+    "vraddhn_u64_rvv_test"
+    "vrsubhn_s16_rvv_test"
+    "vrsubhn_s32_rvv_test"
+    "vrsubhn_s64_rvv_test"
+    "vrsubhn_u16_rvv_test"
+    "vrsubhn_u32_rvv_test"
+    "vrsubhn_u64_rvv_test"
 )
 
 # Define the log file for correctness results
@@ -189,6 +201,8 @@ for i in "${!tests[@]}"; do
         test_no=$((test_no + 1))
     done < "$riscv_out"
 
+    make ARCH=riscv TARGET="${TARGET}" SUBD=riscv SRCS=tests/correctness/"${test}"/"${test}".c clean_disasm
+
     elif [[ "$TARGET" == "spike" ]]; then
         # Run the RISC-V command
         make PK=/home/jenkins_user/runner_dir/workspace/R-Halogen/riscv-pk/build/riscv64-unknown-elf/bin/pk ARCH=riscv TARGET="${TARGET}" SUBD=riscv SRCS=tests/correctness/"${test}"/"${test}".c
@@ -201,6 +215,8 @@ for i in "${!tests[@]}"; do
             echo "${test},test #${test_no},${line}" >> "$log_file"
             test_no=$((test_no + 1))
         done < "$riscv_out"
+        
+        make ARCH=riscv TARGET="${TARGET}" SUBD=riscv SRCS=tests/correctness/"${test}"/"${test}".c clean_disasm
 
     elif [[ "$TARGET" == "qemu-aarch64" ]]; then
         # Run the ARM command
@@ -215,6 +231,8 @@ for i in "${!tests[@]}"; do
             test_no=$((test_no + 1))
         done < "$arm_out"
 
+        make ARCH=arm TARGET="${TARGET}" SUBD=arm SRCS=tests/correctness/"${test}"/"${test}".c clean_disasm
+
     elif [[ "$TARGET" == "raspi4" ]]; then
         # Run the ARM command
         make ARCH=arm TARGET="${TARGET}" SUBD=arm SRCS=tests/correctness/"${test}"/"${test}".c
@@ -224,9 +242,11 @@ for i in "${!tests[@]}"; do
 
         # Read the output file line by line and write to CSV
         while IFS= read -r line; do
-            echo "${test},test #${test_no},${line}" >> "$log_file"
+            echo "${test},test #${test_no},${line}" >> "$log_file"PK=/home/jenkins_user/runner_dir/workspace/R-Halogen/riscv-pk/build/riscv64-unknown-elf/bin/pk
             test_no=$((test_no + 1))
         done < "$arm_out"
+
+        make ARCH=arm TARGET="${TARGET}" SUBD=arm SRCS=tests/correctness/"${test}"/"${test}".c clean_disasm
 
     elif [[ "$TARGET" == "bpif3" ]]; then
         # Run the RISC-V command
@@ -240,6 +260,8 @@ for i in "${!tests[@]}"; do
             echo "${test},test #${test_no},${line}" >> "$log_file"
             test_no=$((test_no + 1))
         done < "$riscv_out"
+
+        make ARCH=riscv TARGET="${TARGET}" SUBD=riscv SRCS=tests/correctness/"${test}"/"${test}".c clean_disasm
 
     else
         echo "Error: Invalid target specified: $TARGET"

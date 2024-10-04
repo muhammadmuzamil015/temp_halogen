@@ -329,7 +329,7 @@ DISM_EXP = "${CROSS_PREFIX}-objdump ${OBJDUMP_FLAGS} $< > $@"
 ##############################################################################
 # Targets
 
-.PHONY: default setup test spike qemu bpif3 raspi4 clean
+.PHONY: default setup test spike qemu bpif3 raspi4 clean clean_disasm
 
 # Default target based on TARGET variable
 ifeq ($(TARGET),qemu-riscv64)
@@ -419,3 +419,6 @@ clean:
 	rm -f  $(MAKEFILE_DIR)/temp.sh
 	rm -rf $(MAKEFILE_DIR)/LINT_RUN
 	rm -rf $(MAKEFILE_DIR)/RUN
+
+clean_disasm:
+	rm -rf $(MAKEFILE_DIR)/${DIS_FILE}
